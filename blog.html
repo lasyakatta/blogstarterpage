@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>My Tech Notes — Blog</title>
+  <meta name="description" content="A lightweight technical blog homepage with post previews." />
+
+  <style>
+    /* Design tokens */
+    :root{
+      --bg: #0b0d12;
+      --panel: #0f131a;
+      --text: #e6e9ef;
+      --muted: #a8b0bd;
+      --brand: #7aa2ff;
+      --accent: #7affbf;
+      --ring: #2b70ff33;
+      --border: #1b2230;
+      --radius: 16px;
+      --shadow: 0 10px 30px rgba(0,0,0,.25);
+    }
+
+    @media (prefers-color-scheme: light){
+      :root{
+        --bg:#f7f9ff;
+        --panel:#ffffff;
+        --text:#0b1220;
+        --muted:#5b6472;
+        --brand:#2b59ff;
+        --accent:#00b36f;
+        --ring:#2b59ff33;
+        --border:#e8edf7;
+      }
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font: 16px/1.6 system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial;
+      color:var(--text);
+      background: radial-gradient(1200px 600px at 10% -10%, #1a2030 0%, transparent 60%) , var(--bg);
+    }
+
+    .container{
+      width:min(1100px, 92%);
+      margin-inline:auto;
+    }
+
+    .site-header{
+      position:sticky; top:0; z-index:10;
+      backdrop-filter: blur(6px);
+      background: color-mix(in oklab, var(--bg) 85%, transparent);
+      border-bottom:1px solid var(--border);
+    }
+    .header-inner{
+      display:flex; align-items:center; justify-content:space-between;
+      min-height:64px; gap:16px;
+    }
+    .site-title{
+      font-size: clamp(20px, 3.2vw, 28px);
+      margin:0;
+      background: linear-gradient(90deg, var(--brand), var(--accent));
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+      font-weight:800;
+    }
+    .nav a{
+      color:var(--muted);
+      text-decoration:none;
+      padding:10px 12px;
+      border-radius:12px;
+    }
+    .nav a[aria-current="page"], .nav a:hover{
+      color:var(--text);
+      background:var(--panel);
+      box-shadow:var(--shadow);
+    }
+
+    .hero{
+      padding: 48px 0 18px;
+    }
+    .hero h2{
+      font-size: clamp(28px, 4.6vw, 40px);
+      margin:0 0 8px;
+    }
+    .hero p{ color:var(--muted); margin:0; }
+
+    .posts{
+      display:grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap:22px;
+      padding: 24px 0 12px;
+    }
+
+    .card{
+      background: linear-gradient(180deg, color-mix(in oklab, var(--panel) 94%, transparent), var(--panel));
+      border:1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+      overflow:hidden;
+    }
+    .card:hover{
+      transform: translateY(-3px);
+      box-shadow: 0 18px 40px rgba(0,0,0,.35);
+      border-color: color-mix(in oklab, var(--brand) 40%, var(--border));
+    }
+    .card-link{
+      display:block;
+      text-decoration:none;
+      color:inherit;
+      padding:18px 18px 20px;
+    }
+    .card-meta{
+      display:flex; align-items:center; gap:10px;
+      color:var(--muted);
+      font-size:14px;
+    }
+    .card-meta .dot{opacity:.6}
+    .tag{
+      padding:.2rem .55rem;
+      border:1px solid var(--border);
+      border-radius:999px;
+      background: color-mix(in oklab, var(--panel) 70%, transparent);
+    }
+    .card-title{
+      margin:10px 0 6px;
+      font-size: clamp(18px, 2.2vw, 22px);
+    }
+    .card-excerpt{ margin:0 0 12px; color:var(--muted); }
+    .read-more{
+      display:inline-block;
+      font-weight:600;
+      border-bottom:1px solid transparent;
+    }
+    .card:hover .read-more{
+      border-bottom-color: currentColor;
+    }
+
+    .about{
+      padding: 28px 0 40px;
+      border-top:1px dashed var(--border);
+    }
+    .about h2{ margin:0 0 8px; }
+
+    .site-footer{
+      border-top:1px solid var(--border);
+      background: color-mix(in oklab, var(--panel) 80%, transparent);
+    }
+    .footer-inner{
+      display:flex; align-items:center; justify-content:space-between;
+      min-height:70px; gap:16px;
+    }
+    .to-top{
+      text-decoration:none; font-weight:700;
+      padding:.4rem .7rem; border-radius:10px;
+      border:1px solid var(--border);
+      color:var(--muted);
+    }
+    .to-top:hover{ color:var(--text); }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <h1 class="site-title">My Tech Notes</h1>
+      <nav class="nav">
+        <a href="#" aria-current="page">Home</a>
+        <a href="#posts">Posts</a>
+        <a href="#about">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container">
+      <h2>Clean tips, tiny snippets, ship faster.</h2>
+      <p>Short, practical write-ups on web, Git, and debugging.</p>
+    </div>
+  </section>
+
+  <main id="posts" class="container posts">
+    <!-- First Post -->
+    <article class="card">
+      <a class="card-link" href="#">
+        <div class="card-meta">
+          <time datetime="2025-08-22">Aug 22, 2025</time>
+          <span class="dot" aria-hidden="true">•</span>
+          <span class="tag">Git</span>
+        </div>
+        <h3 class="card-title">Zero-to-Live: Publish a Static Site on GitHub Pages</h3>
+        <p class="card-excerpt">
+          A 5-minute walkthrough to take a plain HTML file, push it to GitHub, and make it live at a public URL—no build tools required.
+        </p>
+        <span class="read-more">Read →</span>
+      </a>
+    </article>
+
+    <!-- Second Post -->
+    <article class="card">
+      <a class="card-link" href="#">
+        <div class="card-meta">
+          <time datetime="2025-08-20">Aug 20, 2025</time>
+          <span class="dot" aria-hidden="true">•</span>
+          <span class="tag">HTML/CSS</span>
+        </div>
+        <h3 class="card-title">CSS You’ll Actually Reuse: Variables, Clamp, & Flex Gaps</h3>
+        <p class="card-excerpt">
+          Three small patterns that make your stylesheets scale: design tokens, fluid typography with <code>clamp()</code>, and whitespace that just works.
+        </p>
+        <span class="read-more">Read →</span>
+      </a>
+    </article>
+  </main>
+
+  <section id="about" class="container about">
+    <h2>About</h2>
+    <p>
+      I write concise notes while learning. Expect posts on front-end, Git workflows,
+      and debugging tactics. Source code for this blog lives on GitHub.
+    </p>
+  </section>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>© <span id="year"></span> My Tech Notes • Built with HTML & CSS</p>
+      <a class="to-top" href="#top" aria-label="Back to top">↑</a>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
